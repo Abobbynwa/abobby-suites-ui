@@ -7,6 +7,10 @@ import roomStandard from "@/assets/room-standard.jpg";
 import roomDeluxe from "@/assets/room-deluxe.jpg";
 import roomExecutive from "@/assets/room-executive.jpg";
 import roomPresidential from "@/assets/room-presidential.jpg";
+import roomFamily from "@/assets/room-family.jpg";
+import roomTwin from "@/assets/room-twin.jpg";
+import roomSuperior from "@/assets/room-superior.jpg";
+import roomHoneymoon from "@/assets/room-honeymoon.jpg";
 
 const rooms = [
   {
@@ -22,6 +26,18 @@ const rooms = [
     icons: [Wifi, Coffee, Tv],
   },
   {
+    id: "twin",
+    name: "Twin Room",
+    description: "Two comfortable single beds ideal for friends or business colleagues traveling together. Modern and functional design.",
+    price: 55000,
+    image: roomTwin,
+    guests: 2,
+    size: "28 sqm",
+    bed: "2 Single Beds",
+    amenities: ["Free WiFi", "Air Conditioning", "Flat Screen TV", "Mini Fridge", "Room Service", "Work Desk"],
+    icons: [Wifi, Coffee, Tv],
+  },
+  {
     id: "deluxe",
     name: "Deluxe Room",
     description: "Spacious room with premium amenities and stunning city views. Ideal for business travelers seeking comfort.",
@@ -34,6 +50,30 @@ const rooms = [
     icons: [Wifi, Coffee, Tv, Bath],
   },
   {
+    id: "superior",
+    name: "Superior Room",
+    description: "Premium comfort with private balcony access and stunning panoramic views. Upgraded amenities for discerning guests.",
+    price: 95000,
+    image: roomSuperior,
+    guests: 2,
+    size: "40 sqm",
+    bed: "King Bed",
+    amenities: ["Free WiFi", "Air Conditioning", "Smart TV", "Mini Bar", "Room Service", "Balcony", "City View", "Bathtub"],
+    icons: [Wifi, Coffee, Tv, Bath],
+  },
+  {
+    id: "family",
+    name: "Family Room",
+    description: "Spacious accommodation with two beds perfect for families. Child-friendly amenities and extra space for comfort.",
+    price: 100000,
+    image: roomFamily,
+    guests: 4,
+    size: "45 sqm",
+    bed: "1 King + 1 Double Bed",
+    amenities: ["Free WiFi", "Air Conditioning", "Flat Screen TV", "Mini Fridge", "Room Service", "Extra Beds Available", "Kids Menu"],
+    icons: [Wifi, Coffee, Tv, Bath],
+  },
+  {
     id: "executive",
     name: "Executive Suite",
     description: "Luxurious suite featuring a separate living area and workspace. Perfect for extended stays or business executives.",
@@ -43,6 +83,18 @@ const rooms = [
     size: "55 sqm",
     bed: "King Bed + Sofa Bed",
     amenities: ["Free WiFi", "Air Conditioning", "Smart TV", "Full Bar", "24/7 Room Service", "Executive Lounge Access", "Bathtub", "Living Area"],
+    icons: [Wifi, Coffee, Tv, Bath],
+  },
+  {
+    id: "honeymoon",
+    name: "Honeymoon Suite",
+    description: "Romantic retreat designed for couples. Features special amenities including champagne service and rose petal decoration.",
+    price: 180000,
+    image: roomHoneymoon,
+    guests: 2,
+    size: "60 sqm",
+    bed: "King Bed",
+    amenities: ["Free WiFi", "Climate Control", "Smart TV", "Champagne Service", "Room Service", "Jacuzzi", "Rose Petal Decoration", "Private Dining"],
     icons: [Wifi, Coffee, Tv, Bath],
   },
   {
