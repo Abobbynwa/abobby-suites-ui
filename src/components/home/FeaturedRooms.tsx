@@ -5,6 +5,10 @@ import roomStandard from "@/assets/room-standard.jpg";
 import roomDeluxe from "@/assets/room-deluxe.jpg";
 import roomExecutive from "@/assets/room-executive.jpg";
 import roomPresidential from "@/assets/room-presidential.jpg";
+import roomFamily from "@/assets/room-family.jpg";
+import roomTwin from "@/assets/room-twin.jpg";
+import roomSuperior from "@/assets/room-superior.jpg";
+import roomHoneymoon from "@/assets/room-honeymoon.jpg";
 
 const rooms = [
   {
@@ -13,6 +17,15 @@ const rooms = [
     description: "Comfortable and cozy room perfect for solo travelers or couples.",
     price: 45000,
     image: roomStandard,
+    guests: 2,
+    amenities: [Wifi, Coffee, Tv],
+  },
+  {
+    id: "twin",
+    name: "Twin Room",
+    description: "Two comfortable single beds ideal for friends or colleagues.",
+    price: 55000,
+    image: roomTwin,
     guests: 2,
     amenities: [Wifi, Coffee, Tv],
   },
@@ -26,12 +39,39 @@ const rooms = [
     amenities: [Wifi, Coffee, Tv, Bath],
   },
   {
+    id: "superior",
+    name: "Superior Room",
+    description: "Premium comfort with balcony access and stunning views.",
+    price: 95000,
+    image: roomSuperior,
+    guests: 2,
+    amenities: [Wifi, Coffee, Tv, Bath],
+  },
+  {
+    id: "family",
+    name: "Family Room",
+    description: "Spacious accommodation with two beds perfect for families.",
+    price: 100000,
+    image: roomFamily,
+    guests: 4,
+    amenities: [Wifi, Coffee, Tv, Bath],
+  },
+  {
     id: "executive",
     name: "Executive Suite",
     description: "Luxurious suite with separate living area and workspace.",
     price: 120000,
     image: roomExecutive,
     guests: 3,
+    amenities: [Wifi, Coffee, Tv, Bath],
+  },
+  {
+    id: "honeymoon",
+    name: "Honeymoon Suite",
+    description: "Romantic retreat with special amenities for couples.",
+    price: 180000,
+    image: roomHoneymoon,
+    guests: 2,
     amenities: [Wifi, Coffee, Tv, Bath],
   },
   {
