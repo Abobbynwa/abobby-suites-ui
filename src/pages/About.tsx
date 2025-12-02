@@ -11,13 +11,13 @@ const stats = [
 
 const team = [
   {
-    name: "Chief Nnamdi Okonkwo",
+    name: "Chief Agaba Valentine ",
     role: "Founder & Chairman",
     bio: "Visionary entrepreneur with over 20 years in hospitality.",
     avatar: "NO",
   },
   {
-    name: "Mrs. Adaeze Eze",
+    name: "Hon Agaba Joseph",
     role: "General Manager",
     bio: "Expert in hotel operations and guest experience management.",
     avatar: "AE",
@@ -72,7 +72,7 @@ const About = () => {
                   and richness of Nigerian culture.
                 </p>
                 <p>
-                  Named after the founder's grandfather, "Abobby Nwa," the hotel embodies 
+                  Named after the founder's grandfather, "AGABA," the hotel embodies 
                   the traditional values of respect, generosity, and excellence that have 
                   been passed down through generations.
                 </p>
