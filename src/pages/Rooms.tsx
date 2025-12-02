@@ -11,8 +11,27 @@ import roomFamily from "@/assets/room-family.jpg";
 import roomTwin from "@/assets/room-twin.jpg";
 import roomSuperior from "@/assets/room-superior.jpg";
 import roomHoneymoon from "@/assets/room-honeymoon.jpg";
+import roomOceanSuite from "@/assets/room-ocean-suite.jpg";
+import roomPenthouse from "@/assets/room-penthouse.jpg";
+import roomBusiness from "@/assets/room-business.jpg";
+import roomGarden from "@/assets/room-garden.jpg";
+import roomRoyal from "@/assets/room-royal.jpg";
+import roomEconomy from "@/assets/room-economy.jpg";
+import roomPoolside from "@/assets/room-poolside.jpg";
 
 const rooms = [
+  {
+    id: "economy",
+    name: "Economy Room",
+    description: "Budget-friendly comfort without compromising on quality. Perfect for solo travelers seeking affordable luxury.",
+    price: 35000,
+    image: roomEconomy,
+    guests: 1,
+    size: "20 sqm",
+    bed: "Single Bed",
+    amenities: ["Free WiFi", "Air Conditioning", "Flat Screen TV", "Daily Housekeeping"],
+    icons: [Wifi, Tv],
+  },
   {
     id: "standard",
     name: "Standard Room",
@@ -38,6 +57,18 @@ const rooms = [
     icons: [Wifi, Coffee, Tv],
   },
   {
+    id: "garden-view",
+    name: "Garden View Room",
+    description: "Serene room overlooking our beautiful tropical garden. Wake up to nature's beauty with a peaceful atmosphere.",
+    price: 65000,
+    image: roomGarden,
+    guests: 2,
+    size: "30 sqm",
+    bed: "Queen Bed",
+    amenities: ["Free WiFi", "Air Conditioning", "Flat Screen TV", "Mini Bar", "Room Service", "Garden View", "Balcony"],
+    icons: [Wifi, Coffee, Tv],
+  },
+  {
     id: "deluxe",
     name: "Deluxe Room",
     description: "Spacious room with premium amenities and stunning city views. Ideal for business travelers seeking comfort.",
@@ -47,6 +78,18 @@ const rooms = [
     size: "35 sqm",
     bed: "King Bed",
     amenities: ["Free WiFi", "Air Conditioning", "Flat Screen TV", "Mini Bar", "Room Service", "Work Desk", "City View"],
+    icons: [Wifi, Coffee, Tv, Bath],
+  },
+  {
+    id: "business",
+    name: "Business Room",
+    description: "Designed for professionals with ergonomic workspace and high-speed internet. Perfect for extended business stays.",
+    price: 85000,
+    image: roomBusiness,
+    guests: 2,
+    size: "38 sqm",
+    bed: "King Bed",
+    amenities: ["High-Speed WiFi", "Air Conditioning", "Smart TV", "Mini Bar", "24/7 Room Service", "Executive Desk", "City View", "Printer Access"],
     icons: [Wifi, Coffee, Tv, Bath],
   },
   {
@@ -74,6 +117,18 @@ const rooms = [
     icons: [Wifi, Coffee, Tv, Bath],
   },
   {
+    id: "ocean-suite",
+    name: "Ocean View Suite",
+    description: "Breathtaking ocean views with floor-to-ceiling windows. Premium amenities and serene coastal atmosphere.",
+    price: 110000,
+    image: roomOceanSuite,
+    guests: 2,
+    size: "50 sqm",
+    bed: "King Bed",
+    amenities: ["Free WiFi", "Climate Control", "Smart TV", "Mini Bar", "Room Service", "Ocean View", "Private Balcony", "Bathtub"],
+    icons: [Wifi, Coffee, Tv, Bath],
+  },
+  {
     id: "executive",
     name: "Executive Suite",
     description: "Luxurious suite featuring a separate living area and workspace. Perfect for extended stays or business executives.",
@@ -83,6 +138,18 @@ const rooms = [
     size: "55 sqm",
     bed: "King Bed + Sofa Bed",
     amenities: ["Free WiFi", "Air Conditioning", "Smart TV", "Full Bar", "24/7 Room Service", "Executive Lounge Access", "Bathtub", "Living Area"],
+    icons: [Wifi, Coffee, Tv, Bath],
+  },
+  {
+    id: "poolside",
+    name: "Poolside Villa",
+    description: "Direct pool access with private terrace and lounge area. Resort-style living with tropical surroundings.",
+    price: 150000,
+    image: roomPoolside,
+    guests: 2,
+    size: "65 sqm",
+    bed: "King Bed",
+    amenities: ["Free WiFi", "Climate Control", "Smart TV", "Full Bar", "24/7 Room Service", "Pool Access", "Private Terrace", "Outdoor Shower"],
     icons: [Wifi, Coffee, Tv, Bath],
   },
   {
@@ -98,6 +165,18 @@ const rooms = [
     icons: [Wifi, Coffee, Tv, Bath],
   },
   {
+    id: "royal",
+    name: "Royal Suite",
+    description: "Opulent classic design with premium luxury amenities. Experience grandeur with four-poster bed and elegant decor.",
+    price: 220000,
+    image: roomRoyal,
+    guests: 2,
+    size: "75 sqm",
+    bed: "Four-Poster King Bed",
+    amenities: ["Free WiFi", "Climate Control", "Smart TV", "Full Bar", "Butler Service", "Jacuzzi", "Chandelier", "Antique Furniture"],
+    icons: [Wifi, Coffee, Tv, Bath],
+  },
+  {
     id: "presidential",
     name: "Presidential Suite",
     description: "Our finest accommodation with panoramic views, private balcony, and exclusive butler service. The ultimate luxury experience.",
@@ -109,13 +188,26 @@ const rooms = [
     amenities: ["Free WiFi", "Climate Control", "Home Theater", "Private Bar", "Butler Service", "Private Dining", "Jacuzzi", "Panoramic Views", "Private Balcony"],
     icons: [Wifi, Coffee, Tv, Bath],
   },
+  {
+    id: "penthouse",
+    name: "Penthouse Suite",
+    description: "Ultimate luxury living with panoramic city views from the top floor. Private terrace, marble floors, and exclusive amenities.",
+    price: 350000,
+    image: roomPenthouse,
+    guests: 4,
+    size: "150 sqm",
+    bed: "King Bed + 2 Queen Beds",
+    amenities: ["High-Speed WiFi", "Climate Control", "Home Theater", "Private Bar", "24/7 Butler", "Private Chef", "Jacuzzi", "Rooftop Terrace", "City Views", "Helipad Access"],
+    icons: [Wifi, Coffee, Tv, Bath],
+  },
 ];
 
 const priceFilters = [
   { label: "All Rooms", min: 0, max: Infinity },
   { label: "Under ₦50,000", min: 0, max: 50000 },
   { label: "₦50,000 - ₦100,000", min: 50000, max: 100000 },
-  { label: "Above ₦100,000", min: 100000, max: Infinity },
+  { label: "₦100,000 - ₦200,000", min: 100000, max: 200000 },
+  { label: "Above ₦200,000", min: 200000, max: Infinity },
 ];
 
 const Rooms = () => {
@@ -131,10 +223,10 @@ const Rooms = () => {
       <section className="bg-primary py-20">
         <div className="container mx-auto px-4 text-center">
           <h1 className="font-serif text-4xl md:text-5xl font-bold text-primary-foreground mb-4">
-            Our Rooms & Suites
+            Our 15 Rooms & Suites
           </h1>
           <p className="text-primary-foreground/80 text-lg max-w-2xl mx-auto">
-            Discover our carefully curated selection of rooms and suites, 
+            Discover our carefully curated selection of 15 rooms and suites, 
             each designed to provide the ultimate comfort and luxury.
           </p>
         </div>

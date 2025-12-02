@@ -228,18 +228,16 @@ const Payment = () => {
                   {selectedMethod === "bank" && (
                     <div className="space-y-4 animate-fade-in">
                       <h3 className="font-semibold text-foreground mb-4">Bank Transfer Details</h3>
-                      <div className="bg-secondary rounded-lg p-4 space-y-3">
-                        <div>
-                          <span className="text-sm text-muted-foreground">Bank Name:</span>
-                          <p className="font-medium text-foreground">First Bank of Nigeria</p>
+                      <div className="bg-secondary rounded-lg p-4 space-y-4">
+                        <div className="pb-3 border-b border-border">
+                          <span className="text-xs text-muted-foreground uppercase tracking-wide">Option 1 - Opay</span>
+                          <p className="font-medium text-foreground mt-1">AGABA VALENTINE NKWADOCHUKWU</p>
+                          <p className="text-accent font-semibold">8149642220</p>
                         </div>
                         <div>
-                          <span className="text-sm text-muted-foreground">Account Name:</span>
-                          <p className="font-medium text-foreground">ABOBBY NWA AND SUITE LTD</p>
-                        </div>
-                        <div>
-                          <span className="text-sm text-muted-foreground">Account Number:</span>
-                          <p className="font-medium text-foreground">0123456789</p>
+                          <span className="text-xs text-muted-foreground uppercase tracking-wide">Option 2 - Access Bank</span>
+                          <p className="font-medium text-foreground mt-1">AGABA VALENTINE NKWADOCHUKWU</p>
+                          <p className="text-accent font-semibold">1958811618</p>
                         </div>
                       </div>
                       <p className="text-sm text-muted-foreground">
