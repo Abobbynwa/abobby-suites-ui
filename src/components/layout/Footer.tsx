@@ -88,14 +88,19 @@ export function Footer() {
               </li>
               <li className="flex items-center gap-3">
                 <Phone className="h-5 w-5 text-accent flex-shrink-0" />
-                <a href="tel:+2348012345678" className="text-primary-foreground/80 hover:text-accent transition-colors text-sm">
-                  +234 801 234 5678
-                </a>
+                <div className="text-sm">
+                  <a href="tel:+2349032845903" className="text-primary-foreground/80 hover:text-accent transition-colors block">
+                    +234 903 284 5903
+                  </a>
+                  <a href="https://wa.me/2348149642220" className="text-primary-foreground/80 hover:text-accent transition-colors block">
+                    +234 814 964 2220 (WhatsApp)
+                  </a>
+                </div>
               </li>
               <li className="flex items-center gap-3">
                 <Mail className="h-5 w-5 text-accent flex-shrink-0" />
-                <a href="mailto:info@abobbynwa.com" className="text-primary-foreground/80 hover:text-accent transition-colors text-sm">
-                  info@abobbynwa.com
+                <a href="mailto:abobbynwa@proton.me" className="text-primary-foreground/80 hover:text-accent transition-colors text-sm">
+                  abobbynwa@proton.me
                 </a>
               </li>
             </ul>

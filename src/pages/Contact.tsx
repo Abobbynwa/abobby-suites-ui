@@ -84,12 +84,12 @@ const Contact = () => {
                   </div>
                   <div>
                     <h3 className="font-semibold text-foreground mb-1">Phone</h3>
-                    <a href="tel:+2348012345678" className="text-muted-foreground text-sm hover:text-accent transition-colors">
-                      +234 801 234 5678
+                    <a href="tel:+2349032845903" className="text-muted-foreground text-sm hover:text-accent transition-colors">
+                      +234 903 284 5903 (Calls)
                     </a>
                     <br />
-                    <a href="tel:+2348098765432" className="text-muted-foreground text-sm hover:text-accent transition-colors">
-                      +234 809 876 5432
+                    <a href="https://wa.me/2348149642220" className="text-muted-foreground text-sm hover:text-accent transition-colors">
+                      +234 814 964 2220 (WhatsApp)
                     </a>
                   </div>
                 </div>
@@ -100,12 +100,8 @@ const Contact = () => {
                   </div>
                   <div>
                     <h3 className="font-semibold text-foreground mb-1">Email</h3>
-                    <a href="mailto:info@abobbynwa.com" className="text-muted-foreground text-sm hover:text-accent transition-colors">
-                      info@abobbynwa.com
-                    </a>
-                    <br />
-                    <a href="mailto:reservations@abobbynwa.com" className="text-muted-foreground text-sm hover:text-accent transition-colors">
-                      reservations@abobbynwa.com
+                    <a href="mailto:abobbynwa@proton.me" className="text-muted-foreground text-sm hover:text-accent transition-colors">
+                      abobbynwa@proton.me
                     </a>
                   </div>
                 </div>

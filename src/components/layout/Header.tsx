@@ -22,13 +22,13 @@ export function Header() {
       <div className="bg-primary text-primary-foreground py-2 hidden md:block">
         <div className="container mx-auto px-4 flex justify-between items-center text-sm">
           <div className="flex items-center gap-6">
-            <a href="tel:+2348012345678" className="flex items-center gap-2 hover:text-accent transition-colors">
+            <a href="tel:+2349032845903" className="flex items-center gap-2 hover:text-accent transition-colors">
               <Phone className="h-4 w-4" />
-              <span>+234 801 234 5678</span>
+              <span>+234 903 284 5903</span>
             </a>
-            <a href="mailto:info@abobbynwa.com" className="flex items-center gap-2 hover:text-accent transition-colors">
+            <a href="mailto:abobbynwa@proton.me" className="flex items-center gap-2 hover:text-accent transition-colors">
               <Mail className="h-4 w-4" />
-              <span>info@abobbynwa.com</span>
+              <span>abobbynwa@proton.me</span>
             </a>
           </div>
           <div className="flex items-center gap-4">

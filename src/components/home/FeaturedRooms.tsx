@@ -9,8 +9,24 @@ import roomFamily from "@/assets/room-family.jpg";
 import roomTwin from "@/assets/room-twin.jpg";
 import roomSuperior from "@/assets/room-superior.jpg";
 import roomHoneymoon from "@/assets/room-honeymoon.jpg";
+import roomOceanSuite from "@/assets/room-ocean-suite.jpg";
+import roomPenthouse from "@/assets/room-penthouse.jpg";
+import roomBusiness from "@/assets/room-business.jpg";
+import roomGarden from "@/assets/room-garden.jpg";
+import roomRoyal from "@/assets/room-royal.jpg";
+import roomEconomy from "@/assets/room-economy.jpg";
+import roomPoolside from "@/assets/room-poolside.jpg";
 
 const rooms = [
+  {
+    id: "economy",
+    name: "Economy Room",
+    description: "Budget-friendly comfort without compromising on quality.",
+    price: 35000,
+    image: roomEconomy,
+    guests: 1,
+    amenities: [Wifi, Tv],
+  },
   {
     id: "standard",
     name: "Standard Room",
@@ -30,11 +46,29 @@ const rooms = [
     amenities: [Wifi, Coffee, Tv],
   },
   {
+    id: "garden-view",
+    name: "Garden View Room",
+    description: "Serene room overlooking our beautiful tropical garden.",
+    price: 65000,
+    image: roomGarden,
+    guests: 2,
+    amenities: [Wifi, Coffee, Tv],
+  },
+  {
     id: "deluxe",
     name: "Deluxe Room",
     description: "Spacious room with premium amenities and city views.",
     price: 75000,
     image: roomDeluxe,
+    guests: 2,
+    amenities: [Wifi, Coffee, Tv, Bath],
+  },
+  {
+    id: "business",
+    name: "Business Room",
+    description: "Designed for professionals with workspace and city views.",
+    price: 85000,
+    image: roomBusiness,
     guests: 2,
     amenities: [Wifi, Coffee, Tv, Bath],
   },
@@ -57,12 +91,30 @@ const rooms = [
     amenities: [Wifi, Coffee, Tv, Bath],
   },
   {
+    id: "ocean-suite",
+    name: "Ocean View Suite",
+    description: "Breathtaking ocean views with premium amenities.",
+    price: 110000,
+    image: roomOceanSuite,
+    guests: 2,
+    amenities: [Wifi, Coffee, Tv, Bath],
+  },
+  {
     id: "executive",
     name: "Executive Suite",
     description: "Luxurious suite with separate living area and workspace.",
     price: 120000,
     image: roomExecutive,
     guests: 3,
+    amenities: [Wifi, Coffee, Tv, Bath],
+  },
+  {
+    id: "poolside",
+    name: "Poolside Villa",
+    description: "Direct pool access with private terrace and lounge area.",
+    price: 150000,
+    image: roomPoolside,
+    guests: 2,
     amenities: [Wifi, Coffee, Tv, Bath],
   },
   {
@@ -75,6 +127,15 @@ const rooms = [
     amenities: [Wifi, Coffee, Tv, Bath],
   },
   {
+    id: "royal",
+    name: "Royal Suite",
+    description: "Opulent classic design with premium luxury amenities.",
+    price: 220000,
+    image: roomRoyal,
+    guests: 2,
+    amenities: [Wifi, Coffee, Tv, Bath],
+  },
+  {
     id: "presidential",
     name: "Presidential Suite",
     description: "Our finest accommodation with panoramic views and exclusive services.",
@@ -83,9 +144,21 @@ const rooms = [
     guests: 4,
     amenities: [Wifi, Coffee, Tv, Bath],
   },
+  {
+    id: "penthouse",
+    name: "Penthouse Suite",
+    description: "Ultimate luxury with panoramic city views and private terrace.",
+    price: 350000,
+    image: roomPenthouse,
+    guests: 4,
+    amenities: [Wifi, Coffee, Tv, Bath],
+  },
 ];
 
 export function FeaturedRooms() {
+  // Show first 8 rooms on homepage
+  const featuredRooms = rooms.slice(0, 8);
+
   return (
     <section className="py-24 bg-secondary">
       <div className="container mx-auto px-4">
@@ -98,14 +171,14 @@ export function FeaturedRooms() {
             Our Luxurious Rooms
           </h2>
           <p className="text-muted-foreground">
-            Choose from our carefully designed rooms and suites, each offering 
+            Choose from our 15 carefully designed rooms and suites, each offering 
             unique comfort and elegance for your perfect stay.
           </p>
         </div>
 
         {/* Room Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {rooms.map((room, index) => (
+          {featuredRooms.map((room, index) => (
             <div
               key={room.id}
               className="group bg-card rounded-xl overflow-hidden shadow-luxury hover:shadow-luxury-lg transition-all duration-300 hover-lift animate-fade-in-up"
@@ -161,7 +234,7 @@ export function FeaturedRooms() {
         <div className="text-center mt-12">
           <Link to="/rooms">
             <Button variant="gold" size="lg">
-              View All Rooms
+              View All 15 Rooms
               <ArrowRight className="h-5 w-5 ml-2" />
             </Button>
           </Link>
