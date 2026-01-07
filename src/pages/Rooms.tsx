@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
-import { Wifi, Coffee, Tv, Bath, ArrowRight, Users, Check, Filter } from "lucide-react";
+import { Wifi, Coffee, Tv, Bath, ArrowRight, Users, Check, Filter, Loader2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+
+// Static images mapping
 import roomStandard from "@/assets/room-standard.jpg";
 import roomDeluxe from "@/assets/room-deluxe.jpg";
 import roomExecutive from "@/assets/room-executive.jpg";
@@ -19,203 +22,86 @@ import roomRoyal from "@/assets/room-royal.jpg";
 import roomEconomy from "@/assets/room-economy.jpg";
 import roomPoolside from "@/assets/room-poolside.jpg";
 
-const rooms = [
-  {
-    id: "economy",
-    name: "Economy Room",
-    description: "Budget-friendly comfort without compromising on quality. Perfect for solo travelers seeking affordable luxury.",
-    price: 35000,
-    image: roomEconomy,
-    guests: 1,
-    size: "20 sqm",
-    bed: "Single Bed",
-    amenities: ["Free WiFi", "Air Conditioning", "Flat Screen TV", "Daily Housekeeping"],
-    icons: [Wifi, Tv],
-  },
-  {
-    id: "standard",
-    name: "Standard Room",
-    description: "Comfortable and cozy room perfect for solo travelers or couples. Features modern amenities and a relaxing atmosphere.",
-    price: 45000,
-    image: roomStandard,
-    guests: 2,
-    size: "25 sqm",
-    bed: "Queen Bed",
-    amenities: ["Free WiFi", "Air Conditioning", "Flat Screen TV", "Mini Fridge", "Room Service"],
-    icons: [Wifi, Coffee, Tv],
-  },
-  {
-    id: "twin",
-    name: "Twin Room",
-    description: "Two comfortable single beds ideal for friends or business colleagues traveling together. Modern and functional design.",
-    price: 55000,
-    image: roomTwin,
-    guests: 2,
-    size: "28 sqm",
-    bed: "2 Single Beds",
-    amenities: ["Free WiFi", "Air Conditioning", "Flat Screen TV", "Mini Fridge", "Room Service", "Work Desk"],
-    icons: [Wifi, Coffee, Tv],
-  },
-  {
-    id: "garden-view",
-    name: "Garden View Room",
-    description: "Serene room overlooking our beautiful tropical garden. Wake up to nature's beauty with a peaceful atmosphere.",
-    price: 65000,
-    image: roomGarden,
-    guests: 2,
-    size: "30 sqm",
-    bed: "Queen Bed",
-    amenities: ["Free WiFi", "Air Conditioning", "Flat Screen TV", "Mini Bar", "Room Service", "Garden View", "Balcony"],
-    icons: [Wifi, Coffee, Tv],
-  },
-  {
-    id: "deluxe",
-    name: "Deluxe Room",
-    description: "Spacious room with premium amenities and stunning city views. Ideal for business travelers seeking comfort.",
-    price: 75000,
-    image: roomDeluxe,
-    guests: 2,
-    size: "35 sqm",
-    bed: "King Bed",
-    amenities: ["Free WiFi", "Air Conditioning", "Flat Screen TV", "Mini Bar", "Room Service", "Work Desk", "City View"],
-    icons: [Wifi, Coffee, Tv, Bath],
-  },
-  {
-    id: "business",
-    name: "Business Room",
-    description: "Designed for professionals with ergonomic workspace and high-speed internet. Perfect for extended business stays.",
-    price: 85000,
-    image: roomBusiness,
-    guests: 2,
-    size: "38 sqm",
-    bed: "King Bed",
-    amenities: ["High-Speed WiFi", "Air Conditioning", "Smart TV", "Mini Bar", "24/7 Room Service", "Executive Desk", "City View", "Printer Access"],
-    icons: [Wifi, Coffee, Tv, Bath],
-  },
-  {
-    id: "superior",
-    name: "Superior Room",
-    description: "Premium comfort with private balcony access and stunning panoramic views. Upgraded amenities for discerning guests.",
-    price: 95000,
-    image: roomSuperior,
-    guests: 2,
-    size: "40 sqm",
-    bed: "King Bed",
-    amenities: ["Free WiFi", "Air Conditioning", "Smart TV", "Mini Bar", "Room Service", "Balcony", "City View", "Bathtub"],
-    icons: [Wifi, Coffee, Tv, Bath],
-  },
-  {
-    id: "family",
-    name: "Family Room",
-    description: "Spacious accommodation with two beds perfect for families. Child-friendly amenities and extra space for comfort.",
-    price: 100000,
-    image: roomFamily,
-    guests: 4,
-    size: "45 sqm",
-    bed: "1 King + 1 Double Bed",
-    amenities: ["Free WiFi", "Air Conditioning", "Flat Screen TV", "Mini Fridge", "Room Service", "Extra Beds Available", "Kids Menu"],
-    icons: [Wifi, Coffee, Tv, Bath],
-  },
-  {
-    id: "ocean-suite",
-    name: "Ocean View Suite",
-    description: "Breathtaking ocean views with floor-to-ceiling windows. Premium amenities and serene coastal atmosphere.",
-    price: 110000,
-    image: roomOceanSuite,
-    guests: 2,
-    size: "50 sqm",
-    bed: "King Bed",
-    amenities: ["Free WiFi", "Climate Control", "Smart TV", "Mini Bar", "Room Service", "Ocean View", "Private Balcony", "Bathtub"],
-    icons: [Wifi, Coffee, Tv, Bath],
-  },
-  {
-    id: "executive",
-    name: "Executive Suite",
-    description: "Luxurious suite featuring a separate living area and workspace. Perfect for extended stays or business executives.",
-    price: 120000,
-    image: roomExecutive,
-    guests: 3,
-    size: "55 sqm",
-    bed: "King Bed + Sofa Bed",
-    amenities: ["Free WiFi", "Air Conditioning", "Smart TV", "Full Bar", "24/7 Room Service", "Executive Lounge Access", "Bathtub", "Living Area"],
-    icons: [Wifi, Coffee, Tv, Bath],
-  },
-  {
-    id: "poolside",
-    name: "Poolside Villa",
-    description: "Direct pool access with private terrace and lounge area. Resort-style living with tropical surroundings.",
-    price: 150000,
-    image: roomPoolside,
-    guests: 2,
-    size: "65 sqm",
-    bed: "King Bed",
-    amenities: ["Free WiFi", "Climate Control", "Smart TV", "Full Bar", "24/7 Room Service", "Pool Access", "Private Terrace", "Outdoor Shower"],
-    icons: [Wifi, Coffee, Tv, Bath],
-  },
-  {
-    id: "honeymoon",
-    name: "Honeymoon Suite",
-    description: "Romantic retreat designed for couples. Features special amenities including champagne service and rose petal decoration.",
-    price: 180000,
-    image: roomHoneymoon,
-    guests: 2,
-    size: "60 sqm",
-    bed: "King Bed",
-    amenities: ["Free WiFi", "Climate Control", "Smart TV", "Champagne Service", "Room Service", "Jacuzzi", "Rose Petal Decoration", "Private Dining"],
-    icons: [Wifi, Coffee, Tv, Bath],
-  },
-  {
-    id: "royal",
-    name: "Royal Suite",
-    description: "Opulent classic design with premium luxury amenities. Experience grandeur with four-poster bed and elegant decor.",
-    price: 220000,
-    image: roomRoyal,
-    guests: 2,
-    size: "75 sqm",
-    bed: "Four-Poster King Bed",
-    amenities: ["Free WiFi", "Climate Control", "Smart TV", "Full Bar", "Butler Service", "Jacuzzi", "Chandelier", "Antique Furniture"],
-    icons: [Wifi, Coffee, Tv, Bath],
-  },
-  {
-    id: "presidential",
-    name: "Presidential Suite",
-    description: "Our finest accommodation with panoramic views, private balcony, and exclusive butler service. The ultimate luxury experience.",
-    price: 250000,
-    image: roomPresidential,
-    guests: 4,
-    size: "100 sqm",
-    bed: "King Bed + 2 Single Beds",
-    amenities: ["Free WiFi", "Climate Control", "Home Theater", "Private Bar", "Butler Service", "Private Dining", "Jacuzzi", "Panoramic Views", "Private Balcony"],
-    icons: [Wifi, Coffee, Tv, Bath],
-  },
-  {
-    id: "penthouse",
-    name: "Penthouse Suite",
-    description: "Ultimate luxury living with panoramic city views from the top floor. Private terrace, marble floors, and exclusive amenities.",
-    price: 350000,
-    image: roomPenthouse,
-    guests: 4,
-    size: "150 sqm",
-    bed: "King Bed + 2 Queen Beds",
-    amenities: ["High-Speed WiFi", "Climate Control", "Home Theater", "Private Bar", "24/7 Butler", "Private Chef", "Jacuzzi", "Rooftop Terrace", "City Views", "Helipad Access"],
-    icons: [Wifi, Coffee, Tv, Bath],
-  },
-];
+const imageMap: Record<string, string> = {
+  "standard": roomStandard,
+  "deluxe": roomDeluxe,
+  "executive": roomExecutive,
+  "presidential": roomPresidential,
+  "family": roomFamily,
+  "twin": roomTwin,
+  "superior": roomSuperior,
+  "honeymoon": roomHoneymoon,
+  "ocean-suite": roomOceanSuite,
+  "penthouse": roomPenthouse,
+  "business": roomBusiness,
+  "garden": roomGarden,
+  "royal": roomRoyal,
+  "economy": roomEconomy,
+  "poolside": roomPoolside,
+};
+
+interface Room {
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+  price: number;
+  capacity: number;
+  size: string;
+  bed_type: string;
+  amenities: string[];
+  image_url: string;
+}
 
 const priceFilters = [
   { label: "All Rooms", min: 0, max: Infinity },
-  { label: "Under ₦50,000", min: 0, max: 50000 },
-  { label: "₦50,000 - ₦100,000", min: 50000, max: 100000 },
-  { label: "₦100,000 - ₦200,000", min: 100000, max: 200000 },
-  { label: "Above ₦200,000", min: 200000, max: Infinity },
+  { label: "Under ₦30,000", min: 0, max: 30000 },
+  { label: "₦30,000 - ₦60,000", min: 30000, max: 60000 },
+  { label: "₦60,000 - ₦100,000", min: 60000, max: 100000 },
+  { label: "Above ₦100,000", min: 100000, max: Infinity },
 ];
 
 const Rooms = () => {
+  const [rooms, setRooms] = useState<Room[]>([]);
+  const [loading, setLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState(0);
 
+  useEffect(() => {
+    fetchRooms();
+  }, []);
+
+  const fetchRooms = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("rooms")
+        .select("*")
+        .eq("is_available", true)
+        .order("price", { ascending: true });
+
+      if (error) throw error;
+      setRooms(data || []);
+    } catch (error) {
+      console.error("Error fetching rooms:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const filteredRooms = rooms.filter(
-    (room) => room.price >= priceFilters[activeFilter].min && room.price <= priceFilters[activeFilter].max
+    (room) => Number(room.price) >= priceFilters[activeFilter].min && Number(room.price) <= priceFilters[activeFilter].max
   );
+
+  const getImage = (slug: string) => imageMap[slug] || roomStandard;
+
+  if (loading) {
+    return (
+      <Layout>
+        <div className="min-h-screen flex items-center justify-center">
+          <Loader2 className="h-8 w-8 animate-spin text-accent" />
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <Layout>
@@ -223,10 +109,10 @@ const Rooms = () => {
       <section className="bg-primary py-20">
         <div className="container mx-auto px-4 text-center">
           <h1 className="font-serif text-4xl md:text-5xl font-bold text-primary-foreground mb-4">
-            Our 15 Rooms & Suites
+            Our {rooms.length} Rooms & Suites
           </h1>
           <p className="text-primary-foreground/80 text-lg max-w-2xl mx-auto">
-            Discover our carefully curated selection of 15 rooms and suites, 
+            Discover our carefully curated selection of rooms and suites, 
             each designed to provide the ultimate comfort and luxury.
           </p>
         </div>
@@ -262,84 +148,90 @@ const Rooms = () => {
       {/* Rooms Grid */}
       <section className="py-16 bg-background">
         <div className="container mx-auto px-4">
-          <div className="space-y-12">
-            {filteredRooms.map((room, index) => (
-              <div
-                key={room.id}
-                className={`grid grid-cols-1 lg:grid-cols-2 gap-8 items-center ${
-                  index % 2 === 1 ? "lg:flex-row-reverse" : ""
-                }`}
-              >
-                {/* Image */}
-                <div className={`${index % 2 === 1 ? "lg:order-2" : ""}`}>
-                  <div className="relative rounded-xl overflow-hidden shadow-luxury-lg group">
-                    <img
-                      src={room.image}
-                      alt={room.name}
-                      className="w-full h-80 lg:h-96 object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                    <div className="absolute top-4 left-4 bg-accent text-accent-foreground px-4 py-2 rounded-full font-semibold">
-                      ₦{room.price.toLocaleString()}/night
+          {filteredRooms.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground text-lg">No rooms found in this price range.</p>
+            </div>
+          ) : (
+            <div className="space-y-12">
+              {filteredRooms.map((room, index) => (
+                <div
+                  key={room.id}
+                  className={`grid grid-cols-1 lg:grid-cols-2 gap-8 items-center ${
+                    index % 2 === 1 ? "lg:flex-row-reverse" : ""
+                  }`}
+                >
+                  {/* Image */}
+                  <div className={`${index % 2 === 1 ? "lg:order-2" : ""}`}>
+                    <div className="relative rounded-xl overflow-hidden shadow-luxury-lg group">
+                      <img
+                        src={getImage(room.slug)}
+                        alt={room.name}
+                        className="w-full h-80 lg:h-96 object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                      <div className="absolute top-4 left-4 bg-accent text-accent-foreground px-4 py-2 rounded-full font-semibold">
+                        ₦{Number(room.price).toLocaleString()}/night
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Content */}
+                  <div className={`${index % 2 === 1 ? "lg:order-1" : ""}`}>
+                    <h2 className="font-serif text-3xl font-bold text-foreground mb-4">
+                      {room.name}
+                    </h2>
+                    <p className="text-muted-foreground mb-6 leading-relaxed">
+                      {room.description}
+                    </p>
+
+                    {/* Room Details */}
+                    <div className="grid grid-cols-3 gap-4 mb-6">
+                      <div className="text-center p-3 bg-secondary rounded-lg">
+                        <Users className="h-5 w-5 mx-auto mb-1 text-accent" />
+                        <span className="text-sm text-muted-foreground">Up to {room.capacity} guests</span>
+                      </div>
+                      <div className="text-center p-3 bg-secondary rounded-lg">
+                        <span className="block font-semibold text-foreground">{room.size}</span>
+                        <span className="text-sm text-muted-foreground">Room Size</span>
+                      </div>
+                      <div className="text-center p-3 bg-secondary rounded-lg">
+                        <span className="block font-semibold text-foreground text-xs">{room.bed_type}</span>
+                        <span className="text-sm text-muted-foreground">Bed Type</span>
+                      </div>
+                    </div>
+
+                    {/* Amenities */}
+                    <div className="mb-8">
+                      <h3 className="font-semibold text-foreground mb-3">Room Amenities</h3>
+                      <div className="grid grid-cols-2 gap-2">
+                        {room.amenities?.slice(0, 6).map((amenity) => (
+                          <div key={amenity} className="flex items-center gap-2 text-sm text-muted-foreground">
+                            <Check className="h-4 w-4 text-accent" />
+                            {amenity}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* CTAs */}
+                    <div className="flex flex-col sm:flex-row gap-4">
+                      <Link to={`/rooms/${room.slug}`}>
+                        <Button variant="gold" size="lg">
+                          View Details
+                          <ArrowRight className="h-5 w-5 ml-2" />
+                        </Button>
+                      </Link>
+                      <Link to={`/booking?room=${room.slug}`}>
+                        <Button variant="outline-gold" size="lg">
+                          Book Now
+                        </Button>
+                      </Link>
                     </div>
                   </div>
                 </div>
-
-                {/* Content */}
-                <div className={`${index % 2 === 1 ? "lg:order-1" : ""}`}>
-                  <h2 className="font-serif text-3xl font-bold text-foreground mb-4">
-                    {room.name}
-                  </h2>
-                  <p className="text-muted-foreground mb-6 leading-relaxed">
-                    {room.description}
-                  </p>
-
-                  {/* Room Details */}
-                  <div className="grid grid-cols-3 gap-4 mb-6">
-                    <div className="text-center p-3 bg-secondary rounded-lg">
-                      <Users className="h-5 w-5 mx-auto mb-1 text-accent" />
-                      <span className="text-sm text-muted-foreground">Up to {room.guests} guests</span>
-                    </div>
-                    <div className="text-center p-3 bg-secondary rounded-lg">
-                      <span className="block font-semibold text-foreground">{room.size}</span>
-                      <span className="text-sm text-muted-foreground">Room Size</span>
-                    </div>
-                    <div className="text-center p-3 bg-secondary rounded-lg">
-                      <span className="block font-semibold text-foreground">{room.bed}</span>
-                      <span className="text-sm text-muted-foreground">Bed Type</span>
-                    </div>
-                  </div>
-
-                  {/* Amenities */}
-                  <div className="mb-8">
-                    <h3 className="font-semibold text-foreground mb-3">Room Amenities</h3>
-                    <div className="grid grid-cols-2 gap-2">
-                      {room.amenities.slice(0, 6).map((amenity) => (
-                        <div key={amenity} className="flex items-center gap-2 text-sm text-muted-foreground">
-                          <Check className="h-4 w-4 text-accent" />
-                          {amenity}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* CTAs */}
-                  <div className="flex flex-col sm:flex-row gap-4">
-                    <Link to={`/rooms/${room.id}`}>
-                      <Button variant="gold" size="lg">
-                        View Details
-                        <ArrowRight className="h-5 w-5 ml-2" />
-                      </Button>
-                    </Link>
-                    <Link to={`/booking?room=${room.id}`}>
-                      <Button variant="outline-gold" size="lg">
-                        Book Now
-                      </Button>
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
     </Layout>

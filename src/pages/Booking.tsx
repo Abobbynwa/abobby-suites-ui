@@ -1,21 +1,28 @@
-import { useState } from "react";
-import { useSearchParams, Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
-import { Calendar, Users, Bed, CreditCard, ArrowRight, Check } from "lucide-react";
+import { Calendar, Users, Bed, CreditCard, ArrowRight, Check, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
-const rooms = [
-  { id: "standard", name: "Standard Room", price: 45000 },
-  { id: "deluxe", name: "Deluxe Room", price: 75000 },
-  { id: "executive", name: "Executive Suite", price: 120000 },
-  { id: "presidential", name: "Presidential Suite", price: 250000 },
-];
+interface Room {
+  id: string;
+  name: string;
+  slug: string;
+  price: number;
+  capacity: number;
+}
 
 const Booking = () => {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const { toast } = useToast();
   const preselectedRoom = searchParams.get("room") || "";
+
+  const [rooms, setRooms] = useState<Room[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -31,7 +38,33 @@ const Booking = () => {
 
   const [step, setStep] = useState(1);
 
-  const selectedRoom = rooms.find((r) => r.id === formData.room);
+  useEffect(() => {
+    fetchRooms();
+  }, []);
+
+  const fetchRooms = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("rooms")
+        .select("id, name, slug, price, capacity")
+        .eq("is_available", true)
+        .order("price", { ascending: true });
+
+      if (error) throw error;
+      setRooms(data || []);
+    } catch (error) {
+      console.error("Error fetching rooms:", error);
+      toast({
+        title: "Error",
+        description: "Failed to load rooms. Please refresh the page.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const selectedRoom = rooms.find((r) => r.slug === formData.room || r.id === formData.room);
 
   const calculateNights = () => {
     if (!formData.checkIn || !formData.checkOut) return 0;
@@ -42,7 +75,7 @@ const Booking = () => {
   };
 
   const nights = calculateNights();
-  const subtotal = selectedRoom ? selectedRoom.price * nights : 0;
+  const subtotal = selectedRoom ? Number(selectedRoom.price) * nights : 0;
   const tax = subtotal * 0.075; // 7.5% VAT
   const total = subtotal + tax;
 
@@ -50,18 +83,53 @@ const Booking = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
     if (step < 3) {
       setStep(step + 1);
-    } else {
-      // Handle final submission
+      return;
+    }
+
+    // Final submission - create booking
+    setSubmitting(true);
+    try {
+      const { data, error } = await supabase
+        .from("bookings")
+        .insert({
+          room_id: selectedRoom?.id,
+          guest_name: `${formData.firstName} ${formData.lastName}`,
+          guest_email: formData.email,
+          guest_phone: formData.phone,
+          check_in: formData.checkIn,
+          check_out: formData.checkOut,
+          guests: parseInt(formData.guests),
+          total_amount: total,
+          special_requests: formData.specialRequests || null,
+          payment_status: "pending",
+          booking_status: "pending",
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+
       toast({
-        title: "Booking Submitted!",
+        title: "Booking Created!",
         description: "Redirecting to payment page...",
       });
-      // In a real app, redirect to payment
-      window.location.href = "/payment";
+
+      // Navigate to payment with booking details
+      navigate(`/payment?booking=${data.id}&amount=${total}&room=${selectedRoom?.name}`);
+    } catch (error) {
+      console.error("Error creating booking:", error);
+      toast({
+        title: "Booking Failed",
+        description: "There was an error creating your booking. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -72,6 +140,16 @@ const Booking = () => {
   const validateStep2 = () => {
     return formData.firstName && formData.lastName && formData.email && formData.phone;
   };
+
+  if (loading) {
+    return (
+      <Layout>
+        <div className="min-h-screen flex items-center justify-center">
+          <Loader2 className="h-8 w-8 animate-spin text-accent" />
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <Layout>
@@ -180,8 +258,8 @@ const Booking = () => {
                         >
                           <option value="">Select a room</option>
                           {rooms.map((room) => (
-                            <option key={room.id} value={room.id}>
-                              {room.name} - ₦{room.price.toLocaleString()}/night
+                            <option key={room.id} value={room.slug}>
+                              {room.name} - ₦{Number(room.price).toLocaleString()}/night
                             </option>
                           ))}
                         </select>
@@ -199,10 +277,11 @@ const Booking = () => {
                           className="w-full pl-10 pr-4 py-3 border border-border rounded-lg bg-background focus:outline-none focus:border-accent appearance-none"
                           required
                         >
-                          <option value="1">1 Guest</option>
-                          <option value="2">2 Guests</option>
-                          <option value="3">3 Guests</option>
-                          <option value="4">4 Guests</option>
+                          {[...Array(selectedRoom?.capacity || 4)].map((_, i) => (
+                            <option key={i + 1} value={i + 1}>
+                              {i + 1} Guest{i > 0 ? "s" : ""}
+                            </option>
+                          ))}
                         </select>
                       </div>
                     </div>
@@ -363,9 +442,18 @@ const Booking = () => {
                       <Button type="button" variant="outline" size="lg" onClick={() => setStep(2)}>
                         Back
                       </Button>
-                      <Button type="submit" variant="gold" size="lg">
-                        <CreditCard className="h-5 w-5 mr-2" />
-                        Proceed to Payment
+                      <Button type="submit" variant="gold" size="lg" disabled={submitting}>
+                        {submitting ? (
+                          <>
+                            <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                            Processing...
+                          </>
+                        ) : (
+                          <>
+                            <CreditCard className="h-5 w-5 mr-2" />
+                            Proceed to Payment
+                          </>
+                        )}
                       </Button>
                     </div>
                   </div>
@@ -385,7 +473,7 @@ const Booking = () => {
                         <span className="text-muted-foreground">{selectedRoom.name}</span>
                       </div>
                       <div className="flex justify-between text-sm">
-                        <span className="text-muted-foreground">₦{selectedRoom.price.toLocaleString()} × {nights} night{nights > 1 ? "s" : ""}</span>
+                        <span className="text-muted-foreground">₦{Number(selectedRoom.price).toLocaleString()} × {nights} night{nights > 1 ? "s" : ""}</span>
                         <span className="text-foreground">₦{subtotal.toLocaleString()}</span>
                       </div>
                       <div className="flex justify-between text-sm">
@@ -393,22 +481,17 @@ const Booking = () => {
                         <span className="text-foreground">₦{tax.toLocaleString()}</span>
                       </div>
                     </div>
-                    <div className="flex justify-between font-semibold text-lg">
-                      <span className="text-foreground">Total</span>
-                      <span className="text-accent">₦{total.toLocaleString()}</span>
+
+                    <div className="flex justify-between items-center">
+                      <span className="font-semibold text-foreground">Total</span>
+                      <span className="font-serif text-2xl font-bold text-accent">₦{total.toLocaleString()}</span>
                     </div>
                   </>
                 ) : (
                   <p className="text-muted-foreground text-sm">
-                    Select your room and dates to see the price breakdown.
+                    Select a room and dates to see the price breakdown.
                   </p>
                 )}
-
-                <div className="text-xs text-muted-foreground space-y-2">
-                  <p>• Free cancellation up to 24 hours before check-in</p>
-                  <p>• Prices include all taxes and fees</p>
-                  <p>• Secure payment processing</p>
-                </div>
               </div>
             </div>
           </div>
