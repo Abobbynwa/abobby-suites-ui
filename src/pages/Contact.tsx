@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
-import { Phone, Mail, MapPin, Clock, Send } from "lucide-react";
+import { Phone, Mail, MapPin, Clock, Send, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const Contact = () => {
   const { toast } = useToast();
@@ -23,15 +24,34 @@ const Contact = () => {
     e.preventDefault();
     setSending(true);
 
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    try {
+      const { error } = await supabase
+        .from("contact_messages")
+        .insert({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone || null,
+          subject: formData.subject,
+          message: formData.message,
+        });
 
-    setSending(false);
-    toast({
-      title: "Message Sent!",
-      description: "Thank you for contacting us. We'll get back to you within 24 hours.",
-    });
-    setFormData({ name: "", email: "", phone: "", subject: "", message: "" });
+      if (error) throw error;
+
+      toast({
+        title: "Message Sent!",
+        description: "Thank you for contacting us. We'll get back to you within 24 hours.",
+      });
+      setFormData({ name: "", email: "", phone: "", subject: "", message: "" });
+    } catch (error) {
+      console.error("Error sending message:", error);
+      toast({
+        title: "Error",
+        description: "Failed to send message. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -200,7 +220,10 @@ const Contact = () => {
 
                   <Button type="submit" variant="gold" size="xl" disabled={sending}>
                     {sending ? (
-                      "Sending..."
+                      <>
+                        <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                        Sending...
+                      </>
                     ) : (
                       <>
                         <Send className="h-5 w-5 mr-2" />
